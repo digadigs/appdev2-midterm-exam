@@ -13,12 +13,12 @@ class ProductAccessMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $token = $request->bearerToken();
 
         if(!$token){
-            return response()->json(["error" => "Token is missing"], 401);
+            return response()->json(["error" => "Token is missing."], 401);
         }
         if($token !== env('CHECK_TOKEN')){
             return response()->json(["error" => "Token is invalid."], 401);

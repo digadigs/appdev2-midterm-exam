@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -26,7 +25,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('products', ProductController::class);
 
 // Two Additional Routes for Uploading Images
-
 // Local
 Route::post('/products/upload/local', [ProductController::class,
 'uploadImageLocal']);
@@ -35,16 +33,15 @@ Route::post('/products/upload/local', [ProductController::class,
 Route::post('/products/upload/public', [ProductController::class,
 'uploadImagePublic']);
 
-
 // Middleware
-Route::post('/post', function () {
-    return response()->json(['message' => 'POST request handled.']);
-})->middleware(ProductAccessMiddleware::class);
-
-Route::put('/put', function () {
-    return response()->json(['message' => 'PUT request handled.']);
-})->middleware(ProductAccessMiddleware::class);
-
-Route::delete('/delete', function () {
-    return response()->json(['message' => 'Delete request handled.']);
-})->middleware(ProductAccessMiddleware::class);
+Route::middleware('extract.token')->group(function(){    
+    Route::post('/posts', function(){
+        return 'Post request handled.';
+    });
+    Route::put('/posts/{post}', function(){
+        return 'Put request handled.';
+    });
+    Route::delete('/posts/{post}', function(){
+        return 'Delete request handled';
+    });
+});
